@@ -13,6 +13,18 @@ const SALT_ROUNDS = 12;
 async function main(): Promise<void> {
   console.log("Seeding database...");
 
+  // Clean slate — order respects FK constraints
+  await prisma.timeLog.deleteMany({});
+  await prisma.task.deleteMany({});
+  await prisma.sprint.deleteMany({});
+  await prisma.teamMember.deleteMany({});
+  await prisma.team.deleteMany({});
+  await prisma.projectMember.deleteMany({});
+  await prisma.project.deleteMany({});
+  await prisma.refreshToken.deleteMany({});
+  await prisma.user.deleteMany({});
+  console.log("Cleared existing data");
+
   // ─── Users ───────────────────────────────────────────────────────────────
   const adminPassword = await bcrypt.hash("Admin@123456", SALT_ROUNDS);
   const userPassword = await bcrypt.hash("User@123456", SALT_ROUNDS);
@@ -65,30 +77,65 @@ async function main(): Promise<void> {
   const project1 = await prisma.project.create({
     data: {
       name: "E-Commerce Platform",
-      description: "Full-stack e-commerce solution with payment integration and inventory management.",
+      client: "ShopNest Inc.",
+      description: "Full-stack e-commerce solution with payment integration, inventory management, and a customer-facing storefront.",
       status: "ACTIVE",
       startDate: new Date("2024-01-15"),
       endDate: new Date("2024-07-31"),
+      budget: 85000,
+      thumbnail: "https://picsum.photos/seed/ecommerce/800/220",
     },
   });
 
   const project2 = await prisma.project.create({
     data: {
       name: "Mobile Banking App",
-      description: "Secure mobile banking application with biometric auth and real-time transactions.",
+      client: "FinCore Bank",
+      description: "Secure mobile banking application with biometric authentication, real-time transactions, and spending insights.",
       status: "ACTIVE",
       startDate: new Date("2024-03-01"),
       endDate: new Date("2024-12-31"),
+      budget: 140000,
+      thumbnail: "https://picsum.photos/seed/banking/800/220",
     },
   });
 
   const project3 = await prisma.project.create({
     data: {
       name: "Data Analytics Dashboard",
-      description: "Business intelligence dashboard with interactive charts and automated reports.",
+      client: "Insight Analytics Co.",
+      description: "Business intelligence dashboard with interactive charts, drill-down reports, and automated weekly digests.",
       status: "COMPLETED",
       startDate: new Date("2023-09-01"),
       endDate: new Date("2024-02-28"),
+      budget: 52000,
+      thumbnail: "https://picsum.photos/seed/analytics/800/220",
+    },
+  });
+
+  const project4 = await prisma.project.create({
+    data: {
+      name: "HR Management System",
+      client: "PeopleFirst Ltd.",
+      description: "Centralized HR platform covering employee onboarding, leave management, payroll integration, and performance reviews.",
+      status: "PLANNED",
+      startDate: new Date("2024-09-01"),
+      endDate: new Date("2025-03-31"),
+      budget: 72000,
+      thumbnail: "https://picsum.photos/seed/hrms/800/220",
+    },
+  });
+
+  const project5 = await prisma.project.create({
+    data: {
+      name: "Legacy CRM Migration",
+      client: "RetailGiant Corp.",
+      description: "Data migration and modernization of a 10-year-old CRM to a cloud-native microservices architecture.",
+      status: "ARCHIVED",
+      startDate: new Date("2022-06-01"),
+      endDate: new Date("2023-05-31"),
+      budget: 200000,
+      thumbnail: "https://picsum.photos/seed/crm/800/220",
     },
   });
 
@@ -108,6 +155,14 @@ async function main(): Promise<void> {
       { projectId: project3.id, userId: admin1.id, role: "OWNER" },
       { projectId: project3.id, userId: user1.id, role: "MEMBER" },
       { projectId: project3.id, userId: user3.id, role: "MEMBER" },
+      // HR Management System (PLANNED)
+      { projectId: project4.id, userId: admin1.id, role: "OWNER" },
+      { projectId: project4.id, userId: user3.id, role: "MEMBER" },
+      { projectId: project4.id, userId: user4.id, role: "MEMBER" },
+      // Legacy CRM Migration (ARCHIVED)
+      { projectId: project5.id, userId: admin2.id, role: "OWNER" },
+      { projectId: project5.id, userId: user2.id, role: "MEMBER" },
+      { projectId: project5.id, userId: user5.id, role: "MEMBER" },
     ],
     skipDuplicates: true,
   });

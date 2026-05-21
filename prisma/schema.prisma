@@ -12,6 +12,7 @@ enum Role {
 }
 
 enum ProjectStatus {
+  PLANNED
   ACTIVE
   COMPLETED
   ARCHIVED
@@ -69,10 +70,13 @@ model RefreshToken {
 model Project {
   id          String        @id @default(cuid())
   name        String
+  client      String?
   description String?
-  status      ProjectStatus @default(ACTIVE)
+  status      ProjectStatus @default(PLANNED)
   startDate   DateTime?
   endDate     DateTime?
+  budget      Float?
+  thumbnail   String?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
