@@ -208,9 +208,12 @@ async function main(): Promise<void> {
   console.log("Teams seeded");
 
   // ─── Sprints ─────────────────────────────────────────────────────────────
+  // project1 – E-Commerce Platform (3 sprints)
   const sprint1 = await prisma.sprint.create({
     data: {
       name: "Sprint 1 – Foundation",
+      sprintNumber: 1,
+      order: 1,
       goal: "Set up project structure, auth, and core APIs",
       status: "COMPLETED",
       startDate: new Date("2024-01-22"),
@@ -222,6 +225,8 @@ async function main(): Promise<void> {
   const sprint2 = await prisma.sprint.create({
     data: {
       name: "Sprint 2 – Core Features",
+      sprintNumber: 2,
+      order: 2,
       goal: "Product catalog, cart, and checkout flow",
       status: "ACTIVE",
       startDate: new Date("2024-02-05"),
@@ -233,6 +238,8 @@ async function main(): Promise<void> {
   const sprint3 = await prisma.sprint.create({
     data: {
       name: "Sprint 3 – Payments & Polish",
+      sprintNumber: 3,
+      order: 3,
       goal: "Payment integration, notifications, and bug fixes",
       status: "PLANNED",
       startDate: new Date("2024-02-19"),
@@ -241,9 +248,12 @@ async function main(): Promise<void> {
     },
   });
 
+  // project2 – Mobile Banking App (2 sprints)
   const sprint4 = await prisma.sprint.create({
     data: {
       name: "Sprint 1 – Security Layer",
+      sprintNumber: 1,
+      order: 1,
       goal: "Biometric auth, encryption, and secure storage",
       status: "ACTIVE",
       startDate: new Date("2024-03-04"),
@@ -255,11 +265,27 @@ async function main(): Promise<void> {
   const sprint5 = await prisma.sprint.create({
     data: {
       name: "Sprint 2 – Transaction Engine",
+      sprintNumber: 2,
+      order: 2,
       goal: "Real-time transfers, history, and notifications",
       status: "PLANNED",
       startDate: new Date("2024-03-18"),
       endDate: new Date("2024-03-31"),
       projectId: project2.id,
+    },
+  });
+
+  // project4 – HR Management System (PLANNED project, 1 planning sprint)
+  await prisma.sprint.create({
+    data: {
+      name: "Sprint 1 – Discovery & Design",
+      sprintNumber: 1,
+      order: 1,
+      goal: "Stakeholder interviews, UI mockups, and ERD design",
+      status: "PLANNED",
+      startDate: new Date("2024-09-02"),
+      endDate: new Date("2024-09-15"),
+      projectId: project4.id,
     },
   });
 

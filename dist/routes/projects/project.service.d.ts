@@ -57,7 +57,9 @@ declare function findById(id: string): Promise<{
         projectId: string;
         startDate: Date | null;
         endDate: Date | null;
+        sprintNumber: number;
         goal: string | null;
+        order: number;
     })[];
     members: ({
         user: {

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Sprint" ADD COLUMN     "order" INTEGER NOT NULL DEFAULT 0,
+ADD COLUMN     "sprintNumber" INTEGER NOT NULL DEFAULT 1;
