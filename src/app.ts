@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
+import path from "path";
 import { logger } from "./config/logger";
 import { errorHandler } from "./middleware/error.middleware";
 import routes from "./routes";
@@ -22,6 +23,12 @@ app.use(logger);
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Serve uploaded files statically (CORS-open for same-origin frontend)
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "..", "uploads"))
+);
 
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });

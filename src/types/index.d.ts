@@ -15,4 +15,13 @@ declare global {
   }
 }
 
-export {};
+export type AuthUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  avatar: string | null;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};

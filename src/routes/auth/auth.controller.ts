@@ -65,3 +65,8 @@ export const getMe = catchAsync(async (req: Request, res: Response) => {
   const user = await authService.getMe(req.user!.id);
   sendSuccess(res, { user }, "User fetched");
 });
+
+export const listUsers = catchAsync(async (_req: Request, res: Response) => {
+  const users = await authService.listUsers();
+  sendSuccess(res, users, "Users fetched");
+});

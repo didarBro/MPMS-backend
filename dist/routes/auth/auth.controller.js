@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMe = exports.logout = exports.refresh = exports.login = exports.register = void 0;
+exports.listUsers = exports.getMe = exports.logout = exports.refresh = exports.login = exports.register = void 0;
 const catchAsync_1 = require("../../utils/catchAsync");
 const response_1 = require("../../utils/response");
 const authService = __importStar(require("./auth.service"));
@@ -90,5 +90,9 @@ exports.logout = (0, catchAsync_1.catchAsync)(async (req, res) => {
 exports.getMe = (0, catchAsync_1.catchAsync)(async (req, res) => {
     const user = await authService.getMe(req.user.id);
     (0, response_1.sendSuccess)(res, { user }, "User fetched");
+});
+exports.listUsers = (0, catchAsync_1.catchAsync)(async (_req, res) => {
+    const users = await authService.listUsers();
+    (0, response_1.sendSuccess)(res, users, "Users fetched");
 });
 //# sourceMappingURL=auth.controller.js.map

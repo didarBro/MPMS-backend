@@ -42,4 +42,10 @@ export declare function getMe(userId: string): Promise<{
     createdAt: Date;
     updatedAt: Date;
 } | null>;
+export declare function listUsers(): Promise<{
+    name: string;
+    id: string;
+    email: string;
+    role: import("@prisma/client").$Enums.Role;
+}[]>;
 export {};

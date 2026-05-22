@@ -43,10 +43,12 @@ declare function findById(id: string): Promise<{
             status: import("@prisma/client").$Enums.TaskStatus;
             priority: import("@prisma/client").$Enums.Priority;
             storyPoints: number | null;
+            estimate: number | null;
             dueDate: Date | null;
             sprintId: string | null;
             assigneeId: string | null;
             createdById: string;
+            parentId: string | null;
         })[];
     } & {
         name: string;

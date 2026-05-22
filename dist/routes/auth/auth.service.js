@@ -8,6 +8,7 @@ exports.login = login;
 exports.refreshTokens = refreshTokens;
 exports.logout = logout;
 exports.getMe = getMe;
+exports.listUsers = listUsers;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const db_1 = require("../../config/db");
@@ -101,6 +102,13 @@ async function getMe(userId) {
             createdAt: true,
             updatedAt: true,
         },
+    });
+}
+async function listUsers() {
+    return db_1.prisma.user.findMany({
+        where: { isActive: true },
+        select: { id: true, name: true, email: true, role: true },
+        orderBy: { name: "asc" },
     });
 }
 //# sourceMappingURL=auth.service.js.map

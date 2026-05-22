@@ -146,17 +146,34 @@ model Task {
   status      TaskStatus @default(TODO)
   priority    Priority   @default(MEDIUM)
   storyPoints Int?
+  estimate    Float?
   dueDate     DateTime?
   sprintId    String?
   assigneeId  String?
   createdById String
+  parentId    String?
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
-  sprint    Sprint?  @relation(fields: [sprintId], references: [id])
-  assignee  User?    @relation("AssignedTo", fields: [assigneeId], references: [id])
-  createdBy User     @relation("CreatedBy", fields: [createdById], references: [id])
-  timeLogs  TimeLog[]
+  sprint      Sprint?    @relation(fields: [sprintId], references: [id])
+  assignee    User?      @relation("AssignedTo", fields: [assigneeId], references: [id])
+  createdBy   User       @relation("CreatedBy", fields: [createdById], references: [id])
+  parent      Task?      @relation("Subtasks", fields: [parentId], references: [id], onDelete: Cascade)
+  subtasks    Task[]     @relation("Subtasks")
+  timeLogs    TimeLog[]
+  attachments Attachment[]
+}
+
+model Attachment {
+  id        String   @id @default(cuid())
+  taskId    String
+  name      String
+  url       String
+  mimeType  String
+  size      Int
+  createdAt DateTime @default(now())
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
 }
 
 model TimeLog {

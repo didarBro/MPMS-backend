@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const path_1 = __importDefault(require("path"));
 const logger_1 = require("./config/logger");
 const error_middleware_1 = require("./middleware/error.middleware");
 const routes_1 = __importDefault(require("./routes"));
@@ -23,6 +24,8 @@ app.use(logger_1.logger);
 app.use(express_1.default.json({ limit: "10mb" }));
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use((0, cookie_parser_1.default)());
+// Serve uploaded files statically (CORS-open for same-origin frontend)
+app.use("/uploads", express_1.default.static(path_1.default.join(__dirname, "..", "uploads")));
 app.get("/health", (_req, res) => {
     res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
