@@ -11,6 +11,12 @@ async function list(filters) {
         where["client"] = { contains: filters.client, mode: "insensitive" };
     if (filters.search)
         where["name"] = { contains: filters.search, mode: "insensitive" };
+    if (filters.userId) {
+        where["OR"] = [
+            { members: { some: { userId: filters.userId } } },
+            { teams: { some: { members: { some: { userId: filters.userId } } } } },
+        ];
+    }
     const projects = await db_js_1.prisma.project.findMany({
         where,
         orderBy: { createdAt: "desc" },

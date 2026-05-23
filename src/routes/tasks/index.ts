@@ -12,6 +12,9 @@ import {
   deleteTask,
   uploadAttachment,
   deleteAttachment,
+  listComments,
+  addComment,
+  deleteComment,
 } from "./task.controller";
 
 const router = Router();
@@ -26,5 +29,10 @@ router.delete("/:id", authenticate, deleteTask);
 // Attachments
 router.post("/:id/attachments", authenticate, upload.single("file"), uploadAttachment);
 router.delete("/:id/attachments/:attachmentId", authenticate, deleteAttachment);
+
+// Comments
+router.get("/:id/comments", authenticate, listComments);
+router.post("/:id/comments", authenticate, addComment);
+router.delete("/:id/comments/:commentId", authenticate, deleteComment);
 
 export default router;

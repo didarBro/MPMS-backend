@@ -63,6 +63,8 @@ model User {
   timeLogs       TimeLog[]
   projectMembers ProjectMember[]
   refreshTokens  RefreshToken[]
+  comments       Comment[]       @relation("UserComments")
+  activityLogs   ActivityLog[]   @relation("UserActivityLogs")
 }
 
 model RefreshToken {
@@ -164,13 +166,42 @@ model Task {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
-  sprint      Sprint?    @relation(fields: [sprintId], references: [id])
-  assignee    User?      @relation("AssignedTo", fields: [assigneeId], references: [id])
-  createdBy   User       @relation("CreatedBy", fields: [createdById], references: [id])
-  parent      Task?      @relation("Subtasks", fields: [parentId], references: [id], onDelete: Cascade)
-  subtasks    Task[]     @relation("Subtasks")
-  timeLogs    TimeLog[]
-  attachments Attachment[]
+  sprint       Sprint?       @relation(fields: [sprintId], references: [id])
+  assignee     User?         @relation("AssignedTo", fields: [assigneeId], references: [id])
+  createdBy    User          @relation("CreatedBy", fields: [createdById], references: [id])
+  parent       Task?         @relation("Subtasks", fields: [parentId], references: [id], onDelete: Cascade)
+  subtasks     Task[]        @relation("Subtasks")
+  timeLogs     TimeLog[]
+  attachments  Attachment[]
+  comments     Comment[]
+  activityLogs ActivityLog[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  taskId    String
+  userId    String
+  parentId  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  task    Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user    User      @relation("UserComments", fields: [userId], references: [id])
+  parent  Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies Comment[] @relation("CommentReplies")
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  taskId    String
+  userId    String
+  action    String
+  detail    String?
+  createdAt DateTime @default(now())
+
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  user User @relation("UserActivityLogs", fields: [userId], references: [id])
 }
 
 model Attachment {

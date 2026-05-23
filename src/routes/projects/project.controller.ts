@@ -5,8 +5,10 @@ import { sendSuccess } from "../../utils/response.js";
 import type { CreateProjectInput, UpdateProjectInput } from "./project.schema.js";
 
 export const listProjects = catchAsync(async (req: Request, res: Response) => {
-  const { status, client, search } = req.query as Record<string, string | undefined>;
-  const projects = await projectService.list({ status, client, search });
+  const { status, client, search, myProjects } = req.query as Record<string, string | undefined>;
+  const user = req.user as import("../../types/index.d").AuthUser;
+  const userId = myProjects === "true" ? user.id : undefined;
+  const projects = await projectService.list({ status, client, search, userId });
   sendSuccess(res, projects);
 });
 

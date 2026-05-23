@@ -5,8 +5,10 @@ const project_service_js_1 = require("./project.service.js");
 const catchAsync_js_1 = require("../../utils/catchAsync.js");
 const response_js_1 = require("../../utils/response.js");
 exports.listProjects = (0, catchAsync_js_1.catchAsync)(async (req, res) => {
-    const { status, client, search } = req.query;
-    const projects = await project_service_js_1.projectService.list({ status, client, search });
+    const { status, client, search, myProjects } = req.query;
+    const user = req.user;
+    const userId = myProjects === "true" ? user.id : undefined;
+    const projects = await project_service_js_1.projectService.list({ status, client, search, userId });
     (0, response_js_1.sendSuccess)(res, projects);
 });
 exports.getProject = (0, catchAsync_js_1.catchAsync)(async (req, res) => {

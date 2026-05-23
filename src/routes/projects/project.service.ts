@@ -2,11 +2,17 @@ import { prisma } from "../../config/db.js";
 import { ApiError } from "../../utils/ApiError.js";
 import type { CreateProjectInput, UpdateProjectInput } from "./project.schema.js";
 
-async function list(filters: { status?: string; client?: string; search?: string }) {
+async function list(filters: { status?: string; client?: string; search?: string; userId?: string }) {
   const where: Record<string, unknown> = {};
   if (filters.status) where["status"] = filters.status;
   if (filters.client) where["client"] = { contains: filters.client, mode: "insensitive" };
   if (filters.search) where["name"] = { contains: filters.search, mode: "insensitive" };
+  if (filters.userId) {
+    where["OR"] = [
+      { members: { some: { userId: filters.userId } } },
+      { teams: { some: { members: { some: { userId: filters.userId } } } } },
+    ];
+  }
 
   const projects = await prisma.project.findMany({
     where,

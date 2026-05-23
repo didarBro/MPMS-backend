@@ -3,6 +3,7 @@ declare function list(filters: {
     status?: string;
     client?: string;
     search?: string;
+    userId?: string;
 }): Promise<{
     totalTasks: number;
     completedTasks: number;

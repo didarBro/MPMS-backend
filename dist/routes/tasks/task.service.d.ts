@@ -41,10 +41,42 @@ declare function list(filters: {
     createdById: string;
     parentId: string | null;
 })[]>;
-declare function findById(id: string): Promise<{
+declare function findById(id: string, userId?: string, userRole?: string): Promise<{
+    canApprove: boolean;
+    comments: ({
+        user: {
+            name: string;
+            id: string;
+            avatar: string | null;
+        };
+        replies: ({
+            user: {
+                name: string;
+                id: string;
+                avatar: string | null;
+            };
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            parentId: string | null;
+            userId: string;
+            taskId: string;
+            content: string;
+        })[];
+    } & {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        parentId: string | null;
+        userId: string;
+        taskId: string;
+        content: string;
+    })[];
     sprint: {
         name: string;
         id: string;
+        projectId: string;
         project: {
             name: string;
             id: string;
@@ -82,12 +114,25 @@ declare function findById(id: string): Promise<{
         mimeType: string;
         size: number;
     }[];
+    activityLogs: ({
+        user: {
+            name: string;
+            id: string;
+            avatar: string | null;
+        };
+    } & {
+        id: string;
+        createdAt: Date;
+        userId: string;
+        taskId: string;
+        action: string;
+        detail: string | null;
+    })[];
     _count: {
         subtasks: number;
         timeLogs: number;
         attachments: number;
     };
-} & {
     id: string;
     createdAt: Date;
     updatedAt: Date;
@@ -104,9 +149,41 @@ declare function findById(id: string): Promise<{
     parentId: string | null;
 }>;
 declare function create(data: CreateTaskInput, createdById: string): Promise<{
+    canApprove: boolean;
+    comments: ({
+        user: {
+            name: string;
+            id: string;
+            avatar: string | null;
+        };
+        replies: ({
+            user: {
+                name: string;
+                id: string;
+                avatar: string | null;
+            };
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            parentId: string | null;
+            userId: string;
+            taskId: string;
+            content: string;
+        })[];
+    } & {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        parentId: string | null;
+        userId: string;
+        taskId: string;
+        content: string;
+    })[];
     sprint: {
         name: string;
         id: string;
+        projectId: string;
         project: {
             name: string;
             id: string;
@@ -144,12 +221,25 @@ declare function create(data: CreateTaskInput, createdById: string): Promise<{
         mimeType: string;
         size: number;
     }[];
+    activityLogs: ({
+        user: {
+            name: string;
+            id: string;
+            avatar: string | null;
+        };
+    } & {
+        id: string;
+        createdAt: Date;
+        userId: string;
+        taskId: string;
+        action: string;
+        detail: string | null;
+    })[];
     _count: {
         subtasks: number;
         timeLogs: number;
         attachments: number;
     };
-} & {
     id: string;
     createdAt: Date;
     updatedAt: Date;
@@ -166,9 +256,40 @@ declare function create(data: CreateTaskInput, createdById: string): Promise<{
     parentId: string | null;
 }>;
 declare function update(id: string, data: UpdateTaskInput): Promise<{
+    comments: ({
+        user: {
+            name: string;
+            id: string;
+            avatar: string | null;
+        };
+        replies: ({
+            user: {
+                name: string;
+                id: string;
+                avatar: string | null;
+            };
+        } & {
+            id: string;
+            createdAt: Date;
+            updatedAt: Date;
+            parentId: string | null;
+            userId: string;
+            taskId: string;
+            content: string;
+        })[];
+    } & {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        parentId: string | null;
+        userId: string;
+        taskId: string;
+        content: string;
+    })[];
     sprint: {
         name: string;
         id: string;
+        projectId: string;
         project: {
             name: string;
             id: string;
@@ -206,6 +327,20 @@ declare function update(id: string, data: UpdateTaskInput): Promise<{
         mimeType: string;
         size: number;
     }[];
+    activityLogs: ({
+        user: {
+            name: string;
+            id: string;
+            avatar: string | null;
+        };
+    } & {
+        id: string;
+        createdAt: Date;
+        userId: string;
+        taskId: string;
+        action: string;
+        detail: string | null;
+    })[];
     _count: {
         subtasks: number;
         timeLogs: number;
@@ -227,7 +362,7 @@ declare function update(id: string, data: UpdateTaskInput): Promise<{
     createdById: string;
     parentId: string | null;
 }>;
-declare function updateStatus(id: string, data: UpdateStatusInput): Promise<{
+declare function updateStatus(id: string, data: UpdateStatusInput, userId: string, userRole: string): Promise<{
     id: string;
     createdAt: Date;
     updatedAt: Date;
@@ -264,7 +399,7 @@ declare function addAttachment(taskId: string, file: {
     filename: string;
     mimetype: string;
     size: number;
-}): Promise<{
+}, userId: string): Promise<{
     name: string;
     id: string;
     createdAt: Date;
@@ -273,14 +408,78 @@ declare function addAttachment(taskId: string, file: {
     mimeType: string;
     size: number;
 }>;
-declare function removeAttachment(taskId: string, attachmentId: string): Promise<{
-    name: string;
+declare function removeAttachment(taskId: string, attachmentId: string, userId: string): Promise<void>;
+declare function listComments(taskId: string): Promise<({
+    user: {
+        name: string;
+        id: string;
+        avatar: string | null;
+    };
+    replies: ({
+        user: {
+            name: string;
+            id: string;
+            avatar: string | null;
+        };
+    } & {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        parentId: string | null;
+        userId: string;
+        taskId: string;
+        content: string;
+    })[];
+} & {
     id: string;
     createdAt: Date;
+    updatedAt: Date;
+    parentId: string | null;
+    userId: string;
     taskId: string;
-    url: string;
-    mimeType: string;
-    size: number;
+    content: string;
+})[]>;
+declare function addComment(taskId: string, userId: string, data: {
+    content: string;
+    parentId?: string;
+}): Promise<{
+    user: {
+        name: string;
+        id: string;
+        avatar: string | null;
+    };
+    replies: ({
+        user: {
+            name: string;
+            id: string;
+            avatar: string | null;
+        };
+    } & {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        parentId: string | null;
+        userId: string;
+        taskId: string;
+        content: string;
+    })[];
+} & {
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    parentId: string | null;
+    userId: string;
+    taskId: string;
+    content: string;
+}>;
+declare function removeComment(commentId: string, userId: string, userRole: string): Promise<{
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    parentId: string | null;
+    userId: string;
+    taskId: string;
+    content: string;
 }>;
 export declare const taskService: {
     list: typeof list;
@@ -291,5 +490,8 @@ export declare const taskService: {
     remove: typeof remove;
     addAttachment: typeof addAttachment;
     removeAttachment: typeof removeAttachment;
+    listComments: typeof listComments;
+    addComment: typeof addComment;
+    removeComment: typeof removeComment;
 };
 export {};

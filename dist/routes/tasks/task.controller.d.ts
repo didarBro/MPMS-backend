@@ -7,3 +7,6 @@ export declare const patchTaskStatus: (req: Request, res: Response, next: import
 export declare const deleteTask: (req: Request, res: Response, next: import("express").NextFunction) => void;
 export declare const uploadAttachment: (req: Request, res: Response, next: import("express").NextFunction) => void;
 export declare const deleteAttachment: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const listComments: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const addComment: (req: Request, res: Response, next: import("express").NextFunction) => void;
+export declare const deleteComment: (req: Request, res: Response, next: import("express").NextFunction) => void;

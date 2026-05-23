@@ -16,5 +16,9 @@ router.delete("/:id", auth_middleware_1.authenticate, task_controller_1.deleteTa
 // Attachments
 router.post("/:id/attachments", auth_middleware_1.authenticate, upload_middleware_1.upload.single("file"), task_controller_1.uploadAttachment);
 router.delete("/:id/attachments/:attachmentId", auth_middleware_1.authenticate, task_controller_1.deleteAttachment);
+// Comments
+router.get("/:id/comments", auth_middleware_1.authenticate, task_controller_1.listComments);
+router.post("/:id/comments", auth_middleware_1.authenticate, task_controller_1.addComment);
+router.delete("/:id/comments/:commentId", auth_middleware_1.authenticate, task_controller_1.deleteComment);
 exports.default = router;
 //# sourceMappingURL=index.js.map
