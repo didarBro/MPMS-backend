@@ -80,7 +80,7 @@ export async function login(data: LoginInput) {
   return { user: safeUser, accessToken, refreshToken };
 }
 
-export async function refreshTokens(token: string): Promise<TokenPair> {
+export async function refreshTokens(token: string): Promise<TokenPair & { role: string }> {
   const stored = await prisma.refreshToken.findUnique({ where: { token } });
   if (!stored || stored.expiresAt < new Date()) {
     throw new ApiError(401, "Invalid or expired refresh token");
@@ -102,7 +102,7 @@ export async function refreshTokens(token: string): Promise<TokenPair> {
     data: { token: tokens.refreshToken, userId: user.id, expiresAt: refreshExpiryDate() },
   });
 
-  return tokens;
+  return { ...tokens, role: user.role };
 }
 
 export async function logout(token: string): Promise<void> {

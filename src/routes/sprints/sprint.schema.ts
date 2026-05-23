@@ -5,15 +5,33 @@ const isoDateOrEmpty = z
   .optional()
   .transform((v) => (v === "" ? undefined : v));
 
-export const createSprintSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  goal: z.string().optional(),
+const baseSprintSchema = z.object({
+  name: z.string().min(1, "Name is required").max(120),
+  goal: z.string().max(500).optional(),
   status: z.enum(["PLANNED", "ACTIVE", "COMPLETED"]).default("PLANNED"),
   startDate: isoDateOrEmpty,
   endDate: isoDateOrEmpty,
 });
 
-export const updateSprintSchema = createSprintSchema.partial();
+const dateOrderCheck = {
+  check: (data: { startDate?: string; endDate?: string }) => {
+    if (data.startDate && data.endDate) {
+      return new Date(data.endDate) > new Date(data.startDate);
+    }
+    return true;
+  },
+  message: { message: "End date must be after start date", path: ["endDate"] } as const,
+};
+
+export const createSprintSchema = baseSprintSchema.refine(
+  dateOrderCheck.check,
+  dateOrderCheck.message
+);
+
+export const updateSprintSchema = baseSprintSchema.partial().refine(
+  dateOrderCheck.check,
+  dateOrderCheck.message
+);
 
 export const reorderSchema = z.object({
   orderedIds: z.array(z.string()).min(1, "orderedIds must not be empty"),

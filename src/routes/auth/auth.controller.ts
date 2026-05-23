@@ -49,8 +49,8 @@ export const refresh = catchAsync(async (req: Request, res: Response) => {
     res.status(401).json({ success: false, message: "Refresh token not found" });
     return;
   }
-  const { accessToken, refreshToken } = await authService.refreshTokens(token);
-  setAuthCookies(res, accessToken, refreshToken, "");
+  const { accessToken, refreshToken, role } = await authService.refreshTokens(token);
+  setAuthCookies(res, accessToken, refreshToken, role);
   sendSuccess(res, { accessToken }, "Token refreshed");
 });
 
