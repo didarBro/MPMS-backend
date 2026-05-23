@@ -38,14 +38,22 @@ enum Priority {
   CRITICAL
 }
 
+enum TeamRole {
+  ADMIN
+  MANAGER
+  MEMBER
+}
+
 model User {
   id        String   @id @default(cuid())
   name      String
   email     String   @unique
   password  String
-  role      Role     @default(USER)
-  avatar    String?
-  isActive  Boolean  @default(true)
+  role       Role     @default(USER)
+  avatar     String?
+  department String?
+  skills     String[]
+  isActive   Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -114,6 +122,7 @@ model TeamMember {
   id        String   @id @default(cuid())
   teamId    String
   userId    String
+  role      TeamRole @default(MEMBER)
   createdAt DateTime @default(now())
 
   team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)

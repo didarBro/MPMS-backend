@@ -23,6 +23,8 @@ export declare function login(data: LoginInput): Promise<{
         email: string;
         role: import("@prisma/client").$Enums.Role;
         avatar: string | null;
+        department: string | null;
+        skills: string[];
         isActive: boolean;
         createdAt: Date;
         updatedAt: Date;

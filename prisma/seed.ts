@@ -32,43 +32,43 @@ async function main(): Promise<void> {
   const admin1 = await prisma.user.upsert({
     where: { email: "admin@mpms.dev" },
     update: {},
-    create: { name: "Alice Admin", email: "admin@mpms.dev", password: adminPassword, role: "ADMIN" },
+    create: { name: "Alice Admin", email: "admin@mpms.dev", password: adminPassword, role: "ADMIN", department: "Management", skills: ["Project Management", "Leadership", "Agile"] },
   });
 
   const admin2 = await prisma.user.upsert({
     where: { email: "bob.admin@mpms.dev" },
     update: {},
-    create: { name: "Bob Manager", email: "bob.admin@mpms.dev", password: adminPassword, role: "ADMIN" },
+    create: { name: "Bob Manager", email: "bob.admin@mpms.dev", password: adminPassword, role: "ADMIN", department: "Management", skills: ["Scrum", "Risk Management", "Stakeholder Communication"] },
   });
 
   const user1 = await prisma.user.upsert({
     where: { email: "carol@mpms.dev" },
     update: {},
-    create: { name: "Carol Dev", email: "carol@mpms.dev", password: userPassword, role: "USER" },
+    create: { name: "Carol Dev", email: "carol@mpms.dev", password: userPassword, role: "USER", department: "Engineering", skills: ["React", "TypeScript", "Node.js", "PostgreSQL"] },
   });
 
   const user2 = await prisma.user.upsert({
     where: { email: "dave@mpms.dev" },
     update: {},
-    create: { name: "Dave Engineer", email: "dave@mpms.dev", password: userPassword, role: "USER" },
+    create: { name: "Dave Engineer", email: "dave@mpms.dev", password: userPassword, role: "USER", department: "Engineering", skills: ["Python", "PostgreSQL", "Docker", "Kubernetes"] },
   });
 
   const user3 = await prisma.user.upsert({
     where: { email: "eve@mpms.dev" },
     update: {},
-    create: { name: "Eve Designer", email: "eve@mpms.dev", password: userPassword, role: "USER" },
+    create: { name: "Eve Designer", email: "eve@mpms.dev", password: userPassword, role: "USER", department: "Design", skills: ["Figma", "UI/UX Design", "CSS", "Tailwind CSS"] },
   });
 
   const user4 = await prisma.user.upsert({
     where: { email: "frank@mpms.dev" },
     update: {},
-    create: { name: "Frank QA", email: "frank@mpms.dev", password: userPassword, role: "USER" },
+    create: { name: "Frank QA", email: "frank@mpms.dev", password: userPassword, role: "USER", department: "Quality Assurance", skills: ["Jest", "Cypress", "Selenium", "Test Automation"] },
   });
 
   const user5 = await prisma.user.upsert({
     where: { email: "grace@mpms.dev" },
     update: {},
-    create: { name: "Grace DevOps", email: "grace@mpms.dev", password: userPassword, role: "USER" },
+    create: { name: "Grace DevOps", email: "grace@mpms.dev", password: userPassword, role: "USER", department: "DevOps", skills: ["AWS", "CI/CD", "Docker", "Terraform"] },
   });
 
   console.log("Users seeded");
@@ -194,13 +194,13 @@ async function main(): Promise<void> {
 
   await prisma.teamMember.createMany({
     data: [
-      { teamId: team1.id, userId: user3.id },
-      { teamId: team1.id, userId: user1.id },
-      { teamId: team2.id, userId: user1.id },
-      { teamId: team2.id, userId: user2.id },
-      { teamId: team3.id, userId: user2.id },
-      { teamId: team3.id, userId: user4.id },
-      { teamId: team3.id, userId: user5.id },
+      { teamId: team1.id, userId: user3.id, role: "ADMIN" },
+      { teamId: team1.id, userId: user1.id, role: "MEMBER" },
+      { teamId: team2.id, userId: user2.id, role: "ADMIN" },
+      { teamId: team2.id, userId: user1.id, role: "MEMBER" },
+      { teamId: team3.id, userId: user5.id, role: "ADMIN" },
+      { teamId: team3.id, userId: user2.id, role: "MEMBER" },
+      { teamId: team3.id, userId: user4.id, role: "MEMBER" },
     ],
     skipDuplicates: true,
   });
