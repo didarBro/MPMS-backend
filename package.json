@@ -11,6 +11,7 @@
   "scripts": {
     "dev": "nodemon",
     "start": "node dist/server.js",
+    "postinstall": "prisma generate && npm run build",
     "build": "tsc",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
