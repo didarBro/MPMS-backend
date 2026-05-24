@@ -15,7 +15,16 @@ const env_1 = require("./config/env");
 const app = (0, express_1.default)();
 app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)({
-    origin: env_1.env.frontendUrl,
+    origin(origin, callback) {
+        if (!origin) {
+            callback(null, true);
+            return;
+        }
+        const normalizedOrigin = origin.replace(/\/$/, "");
+        const isAllowedOrigin = env_1.env.frontendUrls.includes(normalizedOrigin) ||
+            /^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(normalizedOrigin);
+        callback(isAllowedOrigin ? null : new Error(`Origin ${origin} is not allowed by CORS`), isAllowedOrigin);
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],

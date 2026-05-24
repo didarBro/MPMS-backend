@@ -43,7 +43,7 @@ const REFRESH_TTL = 7 * 24 * 60 * 60 * 1000;
 const COOKIE_BASE = {
     httpOnly: true,
     secure: env_1.env.nodeEnv === "production",
-    sameSite: "lax",
+    sameSite: env_1.env.nodeEnv === "production" ? "none" : "lax",
 };
 function setAuthCookies(res, accessToken, refreshToken, role) {
     res.cookie("access_token", accessToken, { ...COOKIE_BASE, maxAge: ACCESS_TTL });
@@ -51,7 +51,7 @@ function setAuthCookies(res, accessToken, refreshToken, role) {
     res.cookie("user_role", role, {
         httpOnly: false,
         secure: env_1.env.nodeEnv === "production",
-        sameSite: "lax",
+        sameSite: env_1.env.nodeEnv === "production" ? "none" : "lax",
         maxAge: ACCESS_TTL,
     });
 }

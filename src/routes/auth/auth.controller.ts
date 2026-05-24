@@ -11,7 +11,7 @@ const REFRESH_TTL = 7 * 24 * 60 * 60 * 1000;
 const COOKIE_BASE = {
   httpOnly: true,
   secure: env.nodeEnv === "production",
-  sameSite: "lax" as const,
+  sameSite: env.nodeEnv === "production" ? ("none" as const) : ("lax" as const),
 };
 
 function setAuthCookies(res: Response, accessToken: string, refreshToken: string, role: string): void {
@@ -20,7 +20,7 @@ function setAuthCookies(res: Response, accessToken: string, refreshToken: string
   res.cookie("user_role", role, {
     httpOnly: false,
     secure: env.nodeEnv === "production",
-    sameSite: "lax",
+    sameSite: env.nodeEnv === "production" ? ("none" as const) : ("lax" as const),
     maxAge: ACCESS_TTL,
   });
 }

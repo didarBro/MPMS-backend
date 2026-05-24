@@ -13,7 +13,19 @@ const app = express();
 app.use(helmet());
 app.use(
   cors({
-    origin: env.frontendUrl,
+    origin(origin, callback) {
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      const normalizedOrigin = origin.replace(/\/$/, "");
+      const isAllowedOrigin =
+        env.frontendUrls.includes(normalizedOrigin) ||
+        /^https:\/\/[a-z0-9-]+\.vercel\.app$/i.test(normalizedOrigin);
+
+      callback(isAllowedOrigin ? null : new Error(`Origin ${origin} is not allowed by CORS`), isAllowedOrigin);
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],

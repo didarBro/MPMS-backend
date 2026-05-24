@@ -7,4 +7,5 @@ export declare const env: {
     jwtAccessExpiresIn: string;
     jwtRefreshExpiresIn: string;
     frontendUrl: string;
+    frontendUrls: string[];
 };
