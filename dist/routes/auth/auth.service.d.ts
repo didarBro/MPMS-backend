@@ -32,7 +32,9 @@ export declare function login(data: LoginInput): Promise<{
     accessToken: string;
     refreshToken: string;
 }>;
-export declare function refreshTokens(token: string): Promise<TokenPair>;
+export declare function refreshTokens(token: string): Promise<TokenPair & {
+    role: string;
+}>;
 export declare function logout(token: string): Promise<void>;
 export declare function getMe(userId: string): Promise<{
     name: string;

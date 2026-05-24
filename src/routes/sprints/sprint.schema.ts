@@ -20,7 +20,7 @@ const dateOrderCheck = {
     }
     return true;
   },
-  message: { message: "End date must be after start date", path: ["endDate"] } as const,
+  message: { message: "End date must be after start date", path: ["endDate"] },
 };
 
 export const createSprintSchema = baseSprintSchema.refine(

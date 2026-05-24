@@ -76,8 +76,8 @@ exports.refresh = (0, catchAsync_1.catchAsync)(async (req, res) => {
         res.status(401).json({ success: false, message: "Refresh token not found" });
         return;
     }
-    const { accessToken, refreshToken } = await authService.refreshTokens(token);
-    setAuthCookies(res, accessToken, refreshToken, "");
+    const { accessToken, refreshToken, role } = await authService.refreshTokens(token);
+    setAuthCookies(res, accessToken, refreshToken, role);
     (0, response_1.sendSuccess)(res, { accessToken }, "Token refreshed");
 });
 exports.logout = (0, catchAsync_1.catchAsync)(async (req, res) => {

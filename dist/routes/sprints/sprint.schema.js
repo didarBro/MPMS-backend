@@ -6,14 +6,24 @@ const isoDateOrEmpty = zod_1.z
     .string()
     .optional()
     .transform((v) => (v === "" ? undefined : v));
-exports.createSprintSchema = zod_1.z.object({
-    name: zod_1.z.string().min(1, "Name is required"),
-    goal: zod_1.z.string().optional(),
+const baseSprintSchema = zod_1.z.object({
+    name: zod_1.z.string().min(1, "Name is required").max(120),
+    goal: zod_1.z.string().max(500).optional(),
     status: zod_1.z.enum(["PLANNED", "ACTIVE", "COMPLETED"]).default("PLANNED"),
     startDate: isoDateOrEmpty,
     endDate: isoDateOrEmpty,
 });
-exports.updateSprintSchema = exports.createSprintSchema.partial();
+const dateOrderCheck = {
+    check: (data) => {
+        if (data.startDate && data.endDate) {
+            return new Date(data.endDate) > new Date(data.startDate);
+        }
+        return true;
+    },
+    message: { message: "End date must be after start date", path: ["endDate"] },
+};
+exports.createSprintSchema = baseSprintSchema.refine(dateOrderCheck.check, dateOrderCheck.message);
+exports.updateSprintSchema = baseSprintSchema.partial().refine(dateOrderCheck.check, dateOrderCheck.message);
 exports.reorderSchema = zod_1.z.object({
     orderedIds: zod_1.z.array(zod_1.z.string()).min(1, "orderedIds must not be empty"),
 });

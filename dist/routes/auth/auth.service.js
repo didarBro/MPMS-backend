@@ -84,7 +84,7 @@ async function refreshTokens(token) {
     await db_1.prisma.refreshToken.create({
         data: { token: tokens.refreshToken, userId: user.id, expiresAt: refreshExpiryDate() },
     });
-    return tokens;
+    return { ...tokens, role: user.role };
 }
 async function logout(token) {
     await db_1.prisma.refreshToken.deleteMany({ where: { token } }).catch(() => undefined);

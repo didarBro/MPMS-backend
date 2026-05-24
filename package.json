@@ -1,7 +1,10 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/server.js",
+  "engines": {
+    "node": "22.x"
+  },
   "prisma": {
     "seed": "ts-node-dev --transpile-only prisma/seed.ts"
   },
