@@ -4,7 +4,7 @@ import { env } from "../config/env";
 
 interface PrismaError {
   code: string;
-  meta?: { target?: string[] };
+  meta?: { modelName?: string; table?: string; target?: string[] };
 }
 
 export const errorHandler = (
@@ -28,6 +28,15 @@ export const errorHandler = (
       res.status(409).json({
         success: false,
         message: `A record with that ${prismaErr.meta?.target?.join(", ") ?? "value"} already exists`,
+      });
+      return;
+    }
+
+    if (["P2021", "P2022"].includes(prismaErr.code)) {
+      res.status(503).json({
+        success: false,
+        message: "Database schema is not ready. Run Prisma migrations and try again.",
+        ...(env.nodeEnv === "development" && { code: prismaErr.code, meta: prismaErr.meta }),
       });
       return;
     }

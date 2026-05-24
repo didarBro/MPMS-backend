@@ -21,6 +21,14 @@ const errorHandler = (err, _req, res, _next) => {
             });
             return;
         }
+        if (["P2021", "P2022"].includes(prismaErr.code)) {
+            res.status(503).json({
+                success: false,
+                message: "Database schema is not ready. Run Prisma migrations and try again.",
+                ...(env_1.env.nodeEnv === "development" && { code: prismaErr.code, meta: prismaErr.meta }),
+            });
+            return;
+        }
     }
     if (err.name === "JsonWebTokenError") {
         res.status(401).json({ success: false, message: "Invalid token" });
